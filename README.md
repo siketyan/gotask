@@ -25,9 +25,9 @@ Running synchronously means the run blocks the current thread.
 ```go
 task := gotask.NewTask(func (ctx context.Context) error {
     time.Sleep(1 * time.Second)
-	fmt.Println("Task has been finished!")
+    fmt.Println("Task has been finished!")
 
-	return nil
+    return nil
 })
 
 err := task.Do(ctx)
@@ -84,7 +84,7 @@ task := gotask.Parallel(
 values := task.Do(ctx).Unwrap()
 assert.Equal(t, []string{
     "The second task is resolved!",
-	"The first task is resolved!",
+    "The first task is resolved!",
 }, values)
 ```
 
