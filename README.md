@@ -1,6 +1,6 @@
 # ⏰ gotask
 
-Easy asynchronous task runner for Go, inspired by Promise API of ECMAScript and the Task API of .NET.
+Easy asynchronous task runner for Go, inspired by the Promise API of ECMAScript and the Task API of .NET.
 
 
 ## Prerequisites
@@ -19,7 +19,7 @@ import "github.com/siketyan/gotask"
 
 ### Running a Task synchronously
 
-A task is the basically a closure, so you can run it by just calling `Do` receiver function.
+A task is basically a closure, so you can run it by just calling `Do` receiver function.
 Running synchronously means the run blocks the current thread.
 
 ```go
@@ -36,8 +36,8 @@ require.NoError(t, err)
 
 ### Running a Task asynchronously
 
-Using an asynchronous run, it never block the current thread and tasks can be run in parallel.
-`DoAsync` takes a write channel to write the resolved value onto.
+Using an asynchronous run, it never blocks the current thread and tasks can be run in parallel.
+`DoAsync` takes a writable channel to write the resolved value onto.
 
 ```go
 task := gotask.NewTask(func (ctx context.Context) error {
@@ -58,7 +58,7 @@ require.NoError(t, err)
 ### Running tasks in parallel
 
 Using `Parallel` function, you can run many tasks in parallel.
-`Parallel` does **NOT** run any tasks, but only creates a new task from the child tasks.
+It does **NOT** run any tasks, but only creates a new task from the child tasks.
 You need to run the new task explicitly to run the child tasks and resolve the values.
 
 Note that `Parallel` requires the child tasks to return a `Result` struct.
@@ -119,6 +119,9 @@ After run all the child tasks, it returns all the value resolved.
 
 Also it is compatible with the tasks that does not return `Result`.
 
+> **Warning**
+> The order of the tasks and the results are not the same.
+
 ```go
 task := gotask.ParallelSettled(
     gotask.NewTask(func(ctx context.Context) Result[string, error] {
@@ -141,7 +144,6 @@ assert.Equal(t, "The first task is resolved!", results[1].Unwrap())
 ### Running task in parallel (Race)
 
 `Race` creates a new task that runs the child task, and returns the first value resolved by any task.
-
 
 ```go
 task := gotask.Race(
