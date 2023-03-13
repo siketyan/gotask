@@ -5,6 +5,13 @@ type Result[T any, E comparable] struct {
 	err E
 }
 
+func NewResult[T any, E comparable](ok T, err E) Result[T, E] {
+	return Result[T, E]{
+		ok:  ok,
+		err: err,
+	}
+}
+
 func ResultOk[T any, E comparable](ok T) Result[T, E] {
 	return Result[T, E]{
 		ok: ok,
