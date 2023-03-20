@@ -24,6 +24,20 @@ func ResultErr[T any, E comparable](err E) Result[T, E] {
 	}
 }
 
+func UnwrapMany[T any, E comparable](results ...Result[T, E]) ([]T, []E) {
+	values := make([]T, 0, len(results))
+	errs := make([]E, 0, len(results))
+	for _, result := range results {
+		if result.IsOk() {
+			values = append(values, result.Unwrap())
+		} else {
+			errs = append(errs, result.UnwrapErr())
+		}
+	}
+
+	return values, errs
+}
+
 func (r Result[T, E]) IsOk() bool {
 	return isZero(r.err)
 }
