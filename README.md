@@ -11,7 +11,7 @@ Easy asynchronous task runner for Go, inspired by the Promise API of ECMAScript 
 ## Installation
 
 ```go
-import "github.com/siketyan/gotask"
+import "github.com/siketyan/gotask/v2"
 ```
 
 
