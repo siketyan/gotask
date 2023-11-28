@@ -10,15 +10,15 @@ import (
 
 func TestRace(t *testing.T) {
 	task := Race(
-		NewTask(func(ctx context.Context) Result[string, error] {
+		NewTask(func(ctx context.Context) Result[string] {
 			time.Sleep(1000 * time.Millisecond)
 
-			return ResultOk[string, error]("The first task is resolved!")
+			return ResultOk("The first task is resolved!")
 		}),
-		NewTask(func(ctx context.Context) Result[string, error] {
+		NewTask(func(ctx context.Context) Result[string] {
 			time.Sleep(500 * time.Millisecond)
 
-			return ResultOk[string, error]("The second task is resolved!")
+			return ResultOk("The second task is resolved!")
 		}),
 	)
 

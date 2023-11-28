@@ -1,32 +1,32 @@
 package gotask
 
-type Result[T any, E comparable] struct {
+type Result[T any] struct {
 	ok  T
-	err E
+	err error
 }
 
-func NewResult[T any, E comparable](ok T, err E) Result[T, E] {
-	return Result[T, E]{
+func NewResult[T any](ok T, err error) Result[T] {
+	return Result[T]{
 		ok:  ok,
 		err: err,
 	}
 }
 
-func ResultOk[T any, E comparable](ok T) Result[T, E] {
-	return Result[T, E]{
+func ResultOk[T any](ok T) Result[T] {
+	return Result[T]{
 		ok: ok,
 	}
 }
 
-func ResultErr[T any, E comparable](err E) Result[T, E] {
-	return Result[T, E]{
+func ResultErr[T any](err error) Result[T] {
+	return Result[T]{
 		err: err,
 	}
 }
 
-func UnwrapMany[T any, E comparable](results ...Result[T, E]) ([]T, []E) {
+func UnwrapMany[T any](results ...Result[T]) ([]T, []error) {
 	values := make([]T, 0, len(results))
-	errs := make([]E, 0, len(results))
+	errs := make([]error, 0, len(results))
 	for _, result := range results {
 		if result.IsOk() {
 			values = append(values, result.Unwrap())
@@ -38,15 +38,15 @@ func UnwrapMany[T any, E comparable](results ...Result[T, E]) ([]T, []E) {
 	return values, errs
 }
 
-func (r Result[T, E]) IsOk() bool {
+func (r Result[T]) IsOk() bool {
 	return isZero(r.err)
 }
 
-func (r Result[T, E]) IsErr() bool {
+func (r Result[T]) IsErr() bool {
 	return !isZero(r.err)
 }
 
-func (r Result[T, E]) Unwrap() T {
+func (r Result[T]) Unwrap() T {
 	if r.IsErr() {
 		panic("an error result was unwrapped as ok")
 	}
@@ -54,7 +54,7 @@ func (r Result[T, E]) Unwrap() T {
 	return r.ok
 }
 
-func (r Result[T, E]) UnwrapErr() E {
+func (r Result[T]) UnwrapErr() error {
 	if r.IsOk() {
 		panic("an ok result was unwrapped as error")
 	}
@@ -62,6 +62,6 @@ func (r Result[T, E]) UnwrapErr() E {
 	return r.err
 }
 
-func (r Result[T, E]) AsTuple() (T, E) {
+func (r Result[T]) AsTuple() (T, error) {
 	return r.ok, r.err
 }

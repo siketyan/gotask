@@ -12,10 +12,10 @@ import (
 
 func TestThen(t *testing.T) {
 	task := Then(
-		NewTask(func(ctx context.Context) Result[string, error] {
-			return ResultOk[string, error]("123")
+		NewTask(func(ctx context.Context) Result[string] {
+			return ResultOk("123")
 		}),
-		func(ctx context.Context, value string) Result[int, error] {
+		func(ctx context.Context, value string) Result[int] {
 			return NewResult(strconv.Atoi(value))
 		},
 	)
@@ -27,8 +27,8 @@ func TestThen(t *testing.T) {
 
 func TestCatch(t *testing.T) {
 	task := Catch(
-		NewTask(func(ctx context.Context) Result[string, error] {
-			return ResultErr[string, error](errors.New("error occurred"))
+		NewTask(func(ctx context.Context) Result[string] {
+			return ResultErr[string](errors.New("error occurred"))
 		}),
 		func(ctx context.Context, err error) string {
 			return fmt.Sprintf("ERROR: %s", err.Error())
