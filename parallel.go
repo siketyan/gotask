@@ -7,9 +7,9 @@ import (
 // Parallel creates a task that runs the children in parallel, and returns all values resolved by each child task.
 // On any task returned an error, the remaining tasks will be canceled immediately and returns the error.
 // This is only compatible with tasks that returns Result.
-func Parallel[T any, E comparable](tasks ...Task[Result[T, E]]) Task[Result[[]T, E]] {
-	return NewTask(func(ctx context.Context) Result[[]T, E] {
-		resultChan := make(chan Result[T, E])
+func Parallel[T any](tasks ...Task[Result[T]]) Task[Result[[]T]] {
+	return NewTask(func(ctx context.Context) Result[[]T] {
+		resultChan := make(chan Result[T])
 
 		ctx, cancel := context.WithCancel(ctx)
 		defer cancel()
@@ -22,7 +22,7 @@ func Parallel[T any, E comparable](tasks ...Task[Result[T, E]]) Task[Result[[]T,
 		for {
 			result := <-resultChan
 			if result.IsErr() {
-				return ResultErr[[]T, E](result.UnwrapErr())
+				return ResultErr[[]T](result.UnwrapErr())
 			}
 
 			values = append(values, result.Unwrap())
@@ -31,7 +31,7 @@ func Parallel[T any, E comparable](tasks ...Task[Result[T, E]]) Task[Result[[]T,
 			}
 		}
 
-		return ResultOk[[]T, E](values)
+		return ResultOk[[]T](values)
 	})
 }
 

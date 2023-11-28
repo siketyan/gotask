@@ -9,11 +9,11 @@ import (
 
 func TestUnwrapMany(t *testing.T) {
 	values, errs := UnwrapMany(
-		ResultOk[string, error]("abc"),
-		ResultErr[string, error](errors.New("error occurred (1)")),
-		ResultOk[string, error]("def"),
-		ResultErr[string, error](errors.New("error occurred (2)")),
-		ResultOk[string, error]("ghi"),
+		ResultOk("abc"),
+		ResultErr[string](errors.New("error occurred (1)")),
+		ResultOk("def"),
+		ResultErr[string](errors.New("error occurred (2)")),
+		ResultOk("ghi"),
 	)
 
 	assert.Len(t, values, 3)
