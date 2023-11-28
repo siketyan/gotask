@@ -69,15 +69,15 @@ It holds both value and error in one struct, instead of writing `(T, error)` tup
 
 ```go
 task := gotask.Parallel(
-    gotask.NewTask(func(ctx context.Context) Result[string, error] {
+    gotask.NewTask(func(ctx context.Context) Result[string] {
         time.Sleep(1000 * time.Millisecond)
 
-        return gotask.ResultOk[string, error]("The first task is resolved!")
+        return gotask.ResultOk("The first task is resolved!")
     }),
-    gotask.NewTask(func(ctx context.Context) Result[string, error] {
+    gotask.NewTask(func(ctx context.Context) Result[string] {
         time.Sleep(900 * time.Millisecond)
 
-        return gotask.ResultOk[string, error]("The second task is resolved!")
+        return gotask.ResultOk("The second task is resolved!")
     }),
 )
 
@@ -94,15 +94,15 @@ When any child task returned an error, the run will be canceled immediately and 
 
 ```go
 task := gotask.Parallel(
-    gotask.NewTask(func(ctx context.Context) Result[string, error] {
+    gotask.NewTask(func(ctx context.Context) Result[string] {
         time.Sleep(900 * time.Millisecond)
 
-        return gotask.ResultOk[string, error]("The first task is resolved!")
+        return gotask.ResultOk("The first task is resolved!")
     }),
-    gotask.NewTask(func(ctx context.Context) Result[string, error] {
+    gotask.NewTask(func(ctx context.Context) Result[string] {
         time.Sleep(500 * time.Millisecond)
 
-        return gotask.ResultErr[string, error](errors.New("the second task occurred an error"))
+        return gotask.ResultErr[string](errors.New("the second task occurred an error"))
     }),
 )
 
@@ -124,15 +124,15 @@ Also it is compatible with the tasks that does not return `Result`.
 
 ```go
 task := gotask.ParallelSettled(
-    gotask.NewTask(func(ctx context.Context) Result[string, error] {
+    gotask.NewTask(func(ctx context.Context) Result[string] {
         time.Sleep(900 * time.Millisecond)
 
-        return gotask.ResultOk[string, error]("The first task is resolved!")
+        return gotask.ResultOk("The first task is resolved!")
     }),
-    gotask.NewTask(func(ctx context.Context) Result[string, error] {
+    gotask.NewTask(func(ctx context.Context) Result[string] {
         time.Sleep(500 * time.Millisecond)
 
-        return gotask.ResultErr[string, error](errors.New("the second task occurred an error"))
+        return gotask.ResultErr[string](errors.New("the second task occurred an error"))
     }),
 )
 
@@ -147,15 +147,15 @@ assert.Equal(t, "The first task is resolved!", results[1].Unwrap())
 
 ```go
 task := gotask.Race(
-    gotask.NewTask(func(ctx context.Context) Result[string, error] {
+    gotask.NewTask(func(ctx context.Context) Result[string] {
         time.Sleep(1000 * time.Millisecond)
 
-        return gotask.ResultOk[string, error]("The first task is resolved!")
+        return gotask.ResultOk("The first task is resolved!")
     }),
-    gotask.NewTask(func(ctx context.Context) Result[string, error] {
+    gotask.NewTask(func(ctx context.Context) Result[string] {
         time.Sleep(900 * time.Millisecond)
 
-        return gotask.ResultOk[string, error]("The second task is resolved!")
+        return gotask.ResultOk("The second task is resolved!")
     }),
 )
 
