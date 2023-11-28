@@ -1,4 +1,4 @@
-module github.com/siketyan/gotask
+module github.com/siketyan/gotask/v2
 
 go 1.20
 
