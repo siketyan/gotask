@@ -36,3 +36,29 @@ func (t Task[T]) DoAsync(ctx context.Context, valueChan chan<- T) {
 		valueChan <- t.Do(ctx)
 	}()
 }
+
+// Cancelable makes the task cancelable.
+func (t Task[T]) Cancelable() CancelableTask[T] {
+	var c context.CancelFunc
+
+	return CancelableTask[T]{
+		Task: NewTask(func(ctx context.Context) T {
+			ctx, c = context.WithCancel(ctx)
+
+			return t.fn(ctx)
+		}),
+		cancel: &c,
+	}
+}
+
+type CancelableTask[T any] struct {
+	Task[T]
+	cancel *context.CancelFunc
+}
+
+// Cancel cancels the task, if it is still running.
+func (t CancelableTask[T]) Cancel() {
+	if t.cancel != nil && (*t.cancel) != nil {
+		(*t.cancel)()
+	}
+}
