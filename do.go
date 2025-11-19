@@ -20,7 +20,7 @@ func DoRace[T any](ctx context.Context, tasks ...Task[T]) T {
 }
 
 // DoAllFns is the shorthand of TasksFrom + Parallel + Task.Do.
-func DoAllFns[T any, E comparable](ctx context.Context, fns ...func(context.Context) Result[T]) Result[[]T] {
+func DoAllFns[T any](ctx context.Context, fns ...func(context.Context) Result[T]) Result[[]T] {
 	return DoAll(ctx, TasksFrom(fns...)...)
 }
 
